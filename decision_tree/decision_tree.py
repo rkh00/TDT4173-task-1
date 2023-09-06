@@ -82,14 +82,23 @@ class DecisionTree:
 
         rules = self.get_rules()
 
+        classifications = [rule[-1] for rule in rules]
+        most_common_classification = max(classifications, key=classifications.count)
+
         for i in range(len(X)):
-            # print(X.iloc[i])
+
+            has_classification = False
             data = []
+
             for j in range(len(X.iloc[i])):
                 data.append((X.columns[j],X.iloc[i,j]))
             for k in range(len(rules)):
                 if is_contained_within(data,rules[k][0]):
                     results.append(rules[k][1])
+                    has_classification = True
+                    break
+            if not has_classification:
+                results.append(most_common_classification)
 
         return np.array(results)
     
